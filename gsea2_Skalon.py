@@ -19,31 +19,40 @@ class Window(QMainWindow, uic.loadUiType(parse_inputs())[0]):
     
     def __init__(self):
 #        вызываем конструктор суперкласса
+#        call super class constructor
         super(Window, self).__init__()
         self.setupUi(self)
 
         self.home() 
 # по клику на кнопку вызываем функцию и соответственный ответ
+# by clicking the button call the function and the corresponding reaction
     def home(self):
 
         self.pushButton.clicked.connect(self.pushButton_clicked)
 
         self.show()
 # что реализуется по клику:
+# what is implemented by clicking: 
     def pushButton_clicked(self):
 #        считываем текст, введенный в ячейку имени файла и ячейку генов
+#        read the text entered into filename and genes cells
         gse_acc = self.lineEdit.text()
         mytext = self.textEdit.toPlainText()
 #        делаем из генов список
+#        make list from genes
         genes = mytext.split()
 #        загружаем файл по имени
+#        upload file by filename
         gse = GEOparse.get_GEO(geo=gse_acc, destdir="./")
 #        получаем матрицу экспрессии по генам и образцам
+#        get expression matrix by genes and samples
         expression = gse.pivot_samples('VALUE').T
 
 #        получаем список из фенотипов: если в описании присутствует слово 
 #        "control", считаем это контролем и присваиваем 1
-        experiments = {}
+#         retrieve phenotype list: if the "control" word is in the description,
+#         we consider it control group and assign 1 to it
+"        experiments = {}
         for i, (idx, row) in enumerate(gse.phenotype_data.iterrows()):
             tmp = {}
             tmp["Type"] = 1 if "control" in row["description"] else 0
@@ -51,6 +60,7 @@ class Window(QMainWindow, uic.loadUiType(parse_inputs())[0]):
         experiments = pd.DataFrame(experiments).T
         phen=list(experiments['Type'])
 #        строим матрицы корреляций (как в классе)
+#        build correlation matrices
         counter = 0
         all_genes_set = [] 
         all_corr_set = [] 
@@ -70,8 +80,10 @@ class Window(QMainWindow, uic.loadUiType(parse_inputs())[0]):
                         genes_corr_set.append(corr_matrix[0,1])
                         
 #        получаем p-value по тесту Колмогорова-Смирнова
+#        get p-value using the Kolmogorov-Smirnov test
         p_value = ks_2samp(genes_corr_set, all_corr_set)[1]
 #        выводим его в окошко 
+#        print p-value
         self.label_3.setText('{:.3f}'.format(p_value))
 
         
