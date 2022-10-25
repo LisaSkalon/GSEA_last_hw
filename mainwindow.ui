@@ -27,7 +27,7 @@
      <item>
       <widget class="QPushButton" name="pushButton">
        <property name="text">
-        <string>получить p-value</string>
+        <string>get p-value</string>
        </property>
       </widget>
      </item>
@@ -53,7 +53,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>номер  файла</string>
+     <string>filename</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_2">
@@ -66,7 +66,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>имена генов</string>
+     <string>gene names</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_3">
